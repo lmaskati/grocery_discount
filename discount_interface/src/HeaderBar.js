@@ -10,10 +10,7 @@ const HeaderBar = () => (
       <Nav.Link href="#features">Store 2</Nav.Link>
       <Nav.Link href="#pricing">Store 3</Nav.Link>
     </Nav>
-    <Form inline>
-      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-      <Button variant="outline-info">Search</Button>
-    </Form>
+    
   </Navbar>
 );
 
