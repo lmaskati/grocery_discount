@@ -5,13 +5,13 @@ import { Navbar, Nav, FormControl, Button, Form } from 'react-bootstrap';
 
 
 
-const HeaderBar = ({handle}) => (
+const HeaderBar = ({goHome, handle}) => (
 
   <Navbar bg="dark" variant="dark">
-    <Navbar.Brand onClick={()=> {handle()}}>Liyaan's Cool Grocery Site</Navbar.Brand>
+    <Navbar.Brand onClick={()=> {goHome()}}>Liyaan's Cool Grocery Site</Navbar.Brand>
     <Nav className="mr-auto">
-      <Nav.Link onClick={()=> console.log("Fair Price")}>Fair Price</Nav.Link>
-      <Nav.Link onClick={()=> console.log("Cold Storage")}>Cold Storage</Nav.Link>
+      <Nav.Link onClick={()=> {handle()}}>Fair Price</Nav.Link>
+      <Nav.Link onClick={()=> {handle()}}>Cold Storage</Nav.Link>
       
     </Nav>
     

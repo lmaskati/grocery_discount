@@ -5,21 +5,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Spinner, Row } from 'react-bootstrap';
 import HeaderBar from './HeaderBar';
 import SupermarketCard from './SupermarketCard';
-
-
+import ItemCard from './ItemCard';
 
 
 const App = () => {
 
   const [content, setContent] = useState(undefined);
+  const [json, setJson] = useState(undefined);
 
   function handleClick() {
     setContent(undefined);
-  
-    console.log("fffff");
+    makeApiCall();
   }
 
-  useEffect(async () => {
+  function returnHome() {
+    setContent("home");
+  }
+
+  async function makeApiCall() {
+
     const fetchList = async () => {
       const result = await fetch('http://localhost:5000/', {
         headers: new Headers({
@@ -32,7 +36,17 @@ const App = () => {
         return;
       }
       const json = await result.json();
-      setContent("hello");
+      console.log(json);
+      setContent("shop");
+      setJson(json);
+    };
+    fetchList();
+
+  }
+
+  useEffect(async () => {
+    const fetchList = async () => {
+      setContent("home");
     };
     fetchList();
   }, []);
@@ -47,9 +61,7 @@ const App = () => {
         </div>
       </div>
     );
-
-    
-  } else {
+  } else if (content === "home") {
     const shopNames = [["Fair Price", "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1436334225/p4ucgwxnao0czp2ce1ap.png"], ["Cold Storage", "https://yt3.ggpht.com/ytc/AAUvwnirVQw7soAGlGXHSXBcRf5eAIae_lVAKcPQJ1vB=s900-c-k-c0x00ffffff-no-rj"]]
     stuff = (
       <div className="w-100 h-100 d-flex align-items-center justify-content-center">>
@@ -59,12 +71,27 @@ const App = () => {
     </Row>
       </div>
     )
+    } else {
+      console.log("ffff");
+      stuff = (
+        <div className="w-100 h-100 d-flex align-items-center justify-content-center">>
+         
+          <Row xs={1} md={10} className="g-4 d-flex justify-content-center">
+      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard> 
+      </Row>
+        </div>
+      )
 
-  }
-
+    } 
   return (
     <div className="d-flex flex-column w-100 h-100">
-      <HeaderBar handle={handleClick}/>
+      <HeaderBar goHome={returnHome} handle={handleClick}/>
       <div className="d-flex flex-grow-1">
         {stuff}
       </div>
