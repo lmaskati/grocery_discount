@@ -8,4 +8,5 @@ cors = CORS(app, resources={r"*": {"origins": "*"}})
 @app.route("/")
 def hello():
 	time.sleep(2)
-	return jsonify(["f", "f", "f", "g"])
+	return jsonify([{"name":"peanuts","discount":7,"old_price":8}, {"name":"orange","discount":4,"old_price":3}])
+	

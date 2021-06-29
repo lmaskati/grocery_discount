@@ -35,10 +35,11 @@ const App = () => {
         alert("Something went very wrong!");
         return;
       }
-      const json = await result.json();
-      console.log(json);
-      setContent("shop");
-      setJson(json);
+      const results = await result.json();
+      console.log(results);
+      setContent(results);
+      
+      setJson("aaa");
     };
     fetchList();
 
@@ -72,18 +73,22 @@ const App = () => {
       </div>
     )
     } else {
+      console.log(json);
+      console.log(content);
+      console.log("checkk");
       console.log("ffff");
       stuff = (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">>
          
           <Row xs={1} md={10} className="g-4 d-flex justify-content-center">
+          {content.map((item) => <ItemCard name={item["name"]} discount={item["discount"]} old_price={item["old_price"]} />)}
+      {/* <ItemCard></ItemCard> 
       <ItemCard></ItemCard> 
       <ItemCard></ItemCard> 
       <ItemCard></ItemCard> 
       <ItemCard></ItemCard> 
       <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
+      <ItemCard></ItemCard>  */}
       </Row>
         </div>
       )
