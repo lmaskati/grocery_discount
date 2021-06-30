@@ -7,18 +7,18 @@ class Store:
 		self.url = url
 		self.products = products
 		self.clean_products()
+		self.discounts = []
 
 	def run_discounts(self):
 		for prod in self.products:
 			new_url = self.url + prod
-			print("\n***")
-			print("ITEM: " + prod.replace("%20", " "))
 			self.find_discounts(new_url)
+		return self.discounts 
 
 	def find_discounts(self, updated_url):
 		if self.name == "cold storage":
-			print("Cold Storage:")
-			print(" ")
+			# print("Cold Storage:")
+			# print(" ")
 			self.cold_storage_find(updated_url)
 		elif self.name == "ntuc":
 			print("NTUC:")
@@ -27,6 +27,7 @@ class Store:
 
 
 	def cold_storage_find(self, updated_url):
+		
 		page = requests.get(updated_url)
 		parsed_html = BeautifulSoup(page.content, "html.parser")
 		list_of_products = parsed_html.find_all("div", class_="product_box")
@@ -35,19 +36,26 @@ class Store:
 		for product in list_of_products:
 			name = product.find('div', class_="product_name").text
 			discount = product.find('div', class_="price_promo")
+			img_link = product.find('img', class_="img-fluid")["src"]
+			
 			if discount:
 				discount_text = discount.text
 			else:
 				continue
 
-			print("----")
-			print("Product name: " + name.strip())
-			print("Current discount: " + discount_text.strip())
 			price = product.find('div', class_="price_now").text
-			print("Current price: " + price.strip())
-			link = "Link to product: https://coldstorage.com.sg" + product.find('a').get('href')
-			print(link.strip())
 
+			item = {
+				"name": name.strip(),
+				"src": img_link.strip(),
+				"discount": discount_text.strip(),
+				"old_price": price.strip()}
+			# print(item)
+			self.discounts.append(item)
+		
+			# link = "Link to product: https://coldstorage.com.sg" + product.find('a').get('href')
+			# print(link.strip())
+		
 
 	def ntuc_find(self, updated_url):
 		headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -58,7 +66,6 @@ class Store:
 			is_discount = product.find('span', class_="sc-1bsd7ul-1 sc-1plwklf-18 FDtEN hNLPXj")
 			if is_discount:
 				item_name = product.find('span', class_="sc-1bsd7ul-1 gGWxuk").text
-				print("----")
 				print("Product name: " + item_name)
 				old_price = product.find('span', class_="sc-1bsd7ul-1 sc-1svix5t-1 gJhHzP koizQX").text
 				
@@ -78,36 +85,25 @@ class Store:
 	def clean_products(self):
 		self.products = [x.replace(" ", "%20") for x in self.products]
 
-cold_storage_items = []
+
 ntuc_items = [] 
-cold_storage_bool = True
-ntuc_bool = True
 
-print("Enter the items you buy from cold storage. Press 'e' when you are done.")
-while cold_storage_bool:
-	val = input("Enter your item:")
-	if val == 'e':
-		cold_storage_bool = False
-		print("These are your cold storage items:")
-		print(cold_storage_items)
-	else:
-		cold_storage_items.append(val)
+def get_cold_storage():
+	#, "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala c/sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"
+	cold_storage_items = ["peanut", "waitrose mozarella tomato pesto pizza"]
+	cold_storage = Store("cold storage", "https://coldstorage.com.sg/search?q=", cold_storage_items)
+	res = cold_storage.run_discounts()
+	print(res)
+	return res
 
-print("Enter the items you buy from NTUC. Press 'e' when you are done.")
-while ntuc_bool:
-	val = input("Enter your item:")
-	if val == 'e':
-		print("These are your NTUC items:")
-		print(ntuc_items)
-		ntuc_bool = False
-	else:
-		ntuc_items.append(val)
+get_cold_storage()
 
-cold_storage = Store("cold storage", "https://coldstorage.com.sg/search?q=", cold_storage_items)
-cold_storage.run_discounts()
+def check(): 
+	return [{"name":"orange","discount":4,"old_price":3}]
 
-ntuc = Store("ntuc", "https://www.fairprice.com.sg/search?query=", ntuc_items)
-ntuc.run_discounts()
+
+# ntuc = Store("ntuc", "https://www.fairprice.com.sg/search?query=", ntuc_items)
+# ntuc.run_discounts()
 
 
 

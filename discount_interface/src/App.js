@@ -73,22 +73,13 @@ const App = () => {
       </div>
     )
     } else {
-      console.log(json);
-      console.log(content);
-      console.log("checkk");
-      console.log("ffff");
+   
       stuff = (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">>
-         
+
           <Row xs={1} md={10} className="g-4 d-flex justify-content-center">
-          {content.map((item) => <ItemCard name={item["name"]} discount={item["discount"]} old_price={item["old_price"]} />)}
-      {/* <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
-      <ItemCard></ItemCard> 
-      <ItemCard></ItemCard>  */}
+          {content.map((item) => <ItemCard name={item["name"]} discount={item["discount"]} old_price={item["old_price"]} src={item["src"]} />)}
+      
       </Row>
         </div>
       )
