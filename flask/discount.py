@@ -88,15 +88,13 @@ class Store:
 
 ntuc_items = [] 
 
-def get_cold_storage():
+def get_cold_storage(item):
 	#, "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala c/sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"
-	cold_storage_items = ["peanut", "waitrose mozarella tomato pesto pizza"]
+	cold_storage_items = [item]
 	cold_storage = Store("cold storage", "https://coldstorage.com.sg/search?q=", cold_storage_items)
 	res = cold_storage.run_discounts()
-	print(res)
 	return res
 
-get_cold_storage()
 
 def check(): 
 	return [{"name":"orange","discount":4,"old_price":3}]
