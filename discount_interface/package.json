@@ -1,6 +1,6 @@
 {
   "name": "discount_interface",
-  "homepage":"http://lmaskati.github.io/grocery",
+  "homepage":"http://lmaskati.github.io/discount",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
