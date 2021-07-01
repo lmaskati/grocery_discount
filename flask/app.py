@@ -6,6 +6,10 @@ import time
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 
-@app.route("/<arg>")
-def hello(arg):
+@app.route("/")
+def hello():
+	return "hello world!"
+
+@app.route("/coldstorage/<arg>")
+def coldstorage(arg):
 	return jsonify(get_cold_storage(arg))
