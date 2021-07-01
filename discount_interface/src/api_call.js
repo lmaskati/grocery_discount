@@ -1,8 +1,8 @@
-export async function makeApiCall(item, all_res) {
+export async function makeApiCall(item, all_res, store) {
     const fetchList = async () => {
       //https://grocery-sg-flask.herokuapp.com/
       console.log(item);
-      const result = await fetch('http://localhost:5000/' + item, {
+      const result = await fetch('https://grocery-sg-flask.herokuapp.com/' + store + "/" + item, {
         headers: new Headers({
           'content-type': 'application/json',
         }),

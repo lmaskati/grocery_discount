@@ -11,7 +11,7 @@ const ItemCard = ({name, discount, cur_price, category, src}) => (
     <Card.Text>
     {`Discounted price: ${discount}`}
         <br></br>
-    {`Current price: ${cur_price}`}
+    {`Price: ${cur_price}`}
         <br></br>
     {`Category: ${category}`}
     </Card.Text>

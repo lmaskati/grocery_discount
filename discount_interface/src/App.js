@@ -12,14 +12,46 @@ const App = () => {
   const [content, setContent] = useState(undefined);
   const [newcontent, setNewcontent] = useState(undefined);
 
-  async function handleClick() {
+  async function handleClick(store) {
     setNewcontent(undefined);
-    var all_items = ["peanuts", "waitrose mozarella tomato pesto pizza", "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"]
+    var cold_storage_items = ["peanuts", "waitrose mozarella tomato pesto pizza", "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"]
+    var fair_price_items = [
+      "naturel olive oil pure", 
+      "borges olive oil pure",
+      "borges olive oil extra virgin",
+      "barilla pasta",
+      "barilla gluten free pasta",
+      "barilla bio organic pasta",
+      "pomi strained tomatoes",
+      "leggos pasta sauce",
+      "tesco finest pasta sauce",
+      "tesco taco mixed beans",
+      "tesco paprika",
+      "tesco mild curry powder",
+      "tesco smoked paprika",
+      "tesco dried coriander",
+      "tesco muesli swiss style",
+      "tesco chickpeas in water",
+      "fairprice basmati rice",
+      "mayvers all natural spread almond",
+      "naked organic almond butter",
+      "natures wonder baked almonds",
+      "fairprice baked walnuts",
+      "fairprice 100 premium raw honey",
+      "origins natural raw honey"
+  ]
+    var all_items = []
+    if (store === "coldstorage") {
+      all_items = cold_storage_items
+    }
+    else{
+      all_items = fair_price_items
+    }
     var all_res = []
     setContent(undefined);
     for (const item in all_items) {
       setNewcontent(all_items[item])
-      all_res = await makeApiCall(all_items[item], all_res);
+      all_res = await makeApiCall(all_items[item], all_res, store);
       console.log(all_res);
       setContent(all_res);
     }
@@ -49,11 +81,11 @@ const App = () => {
       </div>
     );
   } else if (content === "home") {
-    const shopNames = [["Fair Price", "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1436334225/p4ucgwxnao0czp2ce1ap.png"], ["Cold Storage", "https://yt3.ggpht.com/ytc/AAUvwnirVQw7soAGlGXHSXBcRf5eAIae_lVAKcPQJ1vB=s900-c-k-c0x00ffffff-no-rj"]]
+    const shopNames = [["Fair Price", "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco/v1436334225/p4ucgwxnao0czp2ce1ap.png", "fairprice"], ["Cold Storage", "https://yt3.ggpht.com/ytc/AAUvwnirVQw7soAGlGXHSXBcRf5eAIae_lVAKcPQJ1vB=s900-c-k-c0x00ffffff-no-rj", "coldstorage"]]
     stuff = (
         <div className="w-100 h-100 d-flex align-items-center justify-content-center">
         <Row xs={1} md={10} className="g-4 d-flex justify-content-center">
-    {shopNames.map((item) => <SupermarketCard name={item[0]} link={item[1]} handle={handleClick} />)}
+    {shopNames.map((item) => <SupermarketCard name={item[0]} link={item[1]} id={item[2]} handle={handleClick} />)}
     </Row>
       </div>
     )

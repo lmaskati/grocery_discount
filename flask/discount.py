@@ -59,13 +59,14 @@ class Store:
 		parsed_html = BeautifulSoup(page.content, "html.parser")
 		list_of_products = parsed_html.find_all("div", class_="sc-1plwklf-1 kXzSdT")
 		for product in list_of_products[:1]:
+			img_link = product.find('img', class_="sc-1ha5r19-0 ea-dTNP")["src"]
 			is_discount = product.find('span', class_="sc-1bsd7ul-1 sc-1plwklf-18 FDtEN hNLPXj")
 			if is_discount:
 				item_name = product.find('span', class_="sc-1bsd7ul-1 gGWxuk").text.strip()
 
 				item = {
 				"name": item_name,
-				"src": "",
+				"src": img_link,
 				"discount": "",
 				"cur_price": "",
 				"category":self.prod.replace("%20", " ")}
@@ -101,6 +102,8 @@ def get_fair_price(item):
 	fair_price = Store("ntuc", "https://www.fairprice.com.sg/search?query=", item)
 	res = fair_price.run_discounts()
 	return res
+
+
 
 def get_cold_storage(item):
 	#, "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala c/sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"
