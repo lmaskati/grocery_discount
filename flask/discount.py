@@ -16,14 +16,9 @@ class Store:
 
 	def find_discounts(self, updated_url):
 		if self.name == "cold storage":
-			# print("Cold Storage:")
-			# print(" ")
 			self.cold_storage_find(updated_url)
 		elif self.name == "ntuc":
-			print("NTUC:")
-			print(" ")
 			self.ntuc_find(updated_url)
-
 
 	def cold_storage_find(self, updated_url):
 		
@@ -63,31 +58,49 @@ class Store:
 		page = requests.get(updated_url, headers=headers)
 		parsed_html = BeautifulSoup(page.content, "html.parser")
 		list_of_products = parsed_html.find_all("div", class_="sc-1plwklf-1 kXzSdT")
-		for product in list_of_products:
+		for product in list_of_products[:1]:
 			is_discount = product.find('span', class_="sc-1bsd7ul-1 sc-1plwklf-18 FDtEN hNLPXj")
 			if is_discount:
-				item_name = product.find('span', class_="sc-1bsd7ul-1 gGWxuk").text
-				print("Product name: " + item_name)
-				old_price = product.find('span', class_="sc-1bsd7ul-1 sc-1svix5t-1 gJhHzP koizQX").text
+				item_name = product.find('span', class_="sc-1bsd7ul-1 gGWxuk").text.strip()
+
+				item = {
+				"name": item_name,
+				"src": "",
+				"discount": "",
+				"cur_price": "",
+				"category":self.prod.replace("%20", " ")}
+
+				
+				old_price = product.find('span', class_="sc-1bsd7ul-1 sc-1svix5t-1 gJhHzP koizQX")
 				
 				new_price = product.find('span', class_="sc-1bsd7ul-1 sc-1svix5t-0 gGWxuk esJgnK")
+				#print("HIII")
 				if new_price:
-					print("Original price: " + new_price.text)
-					print("Discounted price: " + old_price)
+					#print(new_price, old_price)
+					item["cur_price"] = new_price.text.strip()
+					item["discount"] = old_price.text.strip()
 				else:
-					print("Original price: " + old_price)
-
+					#print(old_price)
+					item["cur_price"] = old_price.text.strip()
+					item["discount"] = None
 
 				other_discount = product.find('div', class_="sc-1plwklf-16 hRbyxZ")
 				if other_discount:
-					print("Discount: " + other_discount.text)
-
+					if item["discount"]:
+						item["discount"] = item["discount"] + " " + other_discount.text.strip()
+					else:
+						item["discount"] = other_discount.text.strip()
+				self.discounts.append(item)
 
 	def clean_products(self):
 		self.prod = self.prod.replace(" ", "%20")
 
 
-ntuc_items = [] 
+def get_fair_price(item):
+	#, "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala c/sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"
+	fair_price = Store("ntuc", "https://www.fairprice.com.sg/search?query=", item)
+	res = fair_price.run_discounts()
+	return res
 
 def get_cold_storage(item):
 	#, "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala c/sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"

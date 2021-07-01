@@ -13,3 +13,7 @@ def hello():
 @app.route("/coldstorage/<arg>")
 def coldstorage(arg):
 	return jsonify(get_cold_storage(arg))
+
+@app.route("/fairprice/<arg>")
+def fairprice(arg):
+	return jsonify(get_fair_price(arg))
