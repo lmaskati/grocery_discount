@@ -14,12 +14,13 @@ const App = () => {
 
   async function handleClick() {
     setNewcontent(undefined);
-    var all_items = ["peanuts", "chocolate", "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"]
+    var all_items = ["peanuts", "waitrose mozarella tomato pesto pizza", "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"]
     var all_res = []
     setContent(undefined);
     for (const item in all_items) {
       setNewcontent(all_items[item])
       all_res = await makeApiCall(all_items[item], all_res);
+      console.log(all_res);
       setContent(all_res);
     }
     setNewcontent("done");
@@ -76,7 +77,7 @@ const App = () => {
       {more_info}
       <div className="w-100 h-100 d-flex align-items-center justify-content-center">
           <Row xs={1} md={10} className="g-4 d-flex justify-content-center">
-          {content.map((item) => <ItemCard name={item["name"]} discount={item["discount"]} old_price={item["old_price"]} src={item["src"]} />)}
+          {content.map((item) => <ItemCard name={item["name"]} discount={item["discount"]} cur_price={item["cur_price"]} category={item["category"]} src={item["src"]} />)}
       </Row>
         </div>
         </div>

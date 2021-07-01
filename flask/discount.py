@@ -2,17 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 
 class Store:
-	def __init__(self, name, url, products):
+	def __init__(self, name, url, prod):
 		self.name = name
 		self.url = url
-		self.products = products
+		self.prod = prod
 		self.clean_products()
 		self.discounts = []
 
 	def run_discounts(self):
-		for prod in self.products:
-			new_url = self.url + prod
-			self.find_discounts(new_url)
+		new_url = self.url + self.prod
+		self.find_discounts(new_url)
 		return self.discounts 
 
 	def find_discounts(self, updated_url):
@@ -33,7 +32,8 @@ class Store:
 		list_of_products = parsed_html.find_all("div", class_="product_box")
 		final_list_of_products = []
 
-		for product in list_of_products:
+
+		for product in list_of_products[:1]:
 			name = product.find('div', class_="product_name").text
 			discount = product.find('div', class_="price_promo")
 			img_link = product.find('img', class_="img-fluid")["src"]
@@ -49,7 +49,8 @@ class Store:
 				"name": name.strip(),
 				"src": img_link.strip(),
 				"discount": discount_text.strip(),
-				"old_price": price.strip()}
+				"cur_price": price.strip(),
+				"category":self.prod.replace("%20", " ")}
 			# print(item)
 			self.discounts.append(item)
 		
@@ -83,15 +84,14 @@ class Store:
 
 
 	def clean_products(self):
-		self.products = [x.replace(" ", "%20") for x in self.products]
+		self.prod = self.prod.replace(" ", "%20")
 
 
 ntuc_items = [] 
 
 def get_cold_storage(item):
 	#, "waitrose spinach and goat cheese pizza", "waitrose madagascar vanilla ice cream", "waitrose cannellini beans", "waitrose chickpeas in water", "waitrose essential balsamic vinegar", "ozganics indian tikka masala c/sauce", "ozganics sweet chilli sauce", "ozganics creamy avocado dressing"
-	cold_storage_items = [item]
-	cold_storage = Store("cold storage", "https://coldstorage.com.sg/search?q=", cold_storage_items)
+	cold_storage = Store("cold storage", "https://coldstorage.com.sg/search?q=", item)
 	res = cold_storage.run_discounts()
 	return res
 
